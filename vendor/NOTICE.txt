@@ -1,0 +1,4 @@
+mpxj-ts is an LGPL-2.1-or-later TypeScript port of MPXJ by Jon Iles and contributors.
+Upstream distribution: https://github.com/mja1337/ms-project-viewer/tree/1153939f746578ef990721c64229bdc6bf782452
+The upstream module is unmodified. Corresponding source and build configuration
+are in mpxj-source.zip. See LICENSE for license terms.
