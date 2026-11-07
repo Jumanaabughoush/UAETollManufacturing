@@ -50,7 +50,9 @@
     <div class="side-foot"><div class="private"><i></i>Private dashboard</div>Microsoft Project portfolio</div>
   </aside>
   <div class="shell">
-    <header class="topbar"><div class="header-brand"><img class="company-logo" src="dar-aldawa-logo.png" alt="دار الدواء — Dar Aldawa" width="126" height="110"><div class="header-title"><span class="company-label">DAR ALDAWA · MICROSYNERGY</span><h1 id="pageTitle">Portfolio Dashboard</h1></div></div><div class="updated" id="updated">Updated today</div></header>
+    <header class="topbar"><div class="header-brand"><img class="company-logo" src="dar-aldawa-logo.png" alt="دار الدواء — Dar Aldawa" width="126" height="110"><div class="header-title"><span class="company-label">DAR ALDAWA · MICROSYNERGY</span><h1 id="pageTitle">Portfolio Dashboard</h1></div></div><div class="toolbar"><div class="updated" id="updated">Updated today</div><button class="kanban-primary" id="uploadData" type="button" disabled>Upload Data</button></div></header>
+    <input id="scheduleFiles" type="file" accept=".mpp,.xml" multiple hidden>
+    <div id="importInfo" class="updated" hidden><span id="importStatus" role="status"></span> <button id="resetData" type="button" hidden>Use published data</button></div>
     <main>
       <section id="dashboardPage">
         <div class="section-head"><div><h2>Project Portfolio Overview</h2><p>Track all product schedules from one place.</p></div><div class="toolbar"><div class="field select"><select id="projectFilter" aria-label="Filter project"><option value="all">All Projects</option></select></div><div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="taskSearch" type="search" placeholder="Search tasks" aria-label="Search tasks"></div></div></div>
@@ -123,11 +125,21 @@
     const counts=['Completed','In Progress','Upcoming','Overdue'].map(s=>[s,tasks.filter(t=>status(t)===s).length]);const max=Math.max(1,...counts.map(x=>x[1]));const colors={'Completed':'var(--green)','In Progress':'var(--blue)','Upcoming':'#9aa8ba','Overdue':'var(--red)'};
     $('statusCaption').textContent=selected==='all'?'All project tasks':current[0]?.name||'';$('statusChart').innerHTML=counts.map(([s,n])=>`<div class="status-row"><span>${s}</span><div class="status-track"><i style="width:${n/max*100}%;background:${colors[s]}"></i></div><strong>${n}</strong></div>`).join('');
     $('milestoneList').innerHTML=milestones.sort((a,b)=>new Date(a.finish)-new Date(b.finish)).slice(0,6).map(t=>`<div class="milestone"><i class="diamond"></i><div><strong>${esc(t.name)}</strong><small>${esc(t.project)}</small></div><time>${fmt(t.finish)}</time></div>`).join('')||'<div class="empty">No milestones found.</div>';
-    renderTasks(tasks);$('controlProjects').textContent=projects.length;$('controlTasks').textContent=projects.reduce((s,p)=>s+workTasks(p).length,0);$('controlFinish').textContent=fmt(Math.max(...projects.map(p=>new Date(rootTask(p).finish))));
+    renderTasks(tasks);$('controlProjects').textContent=projects.length;$('controlTasks').textContent=projects.reduce((s,p)=>s+workTasks(p).length,0);$('controlFinish').textContent=fmt(projects.length ? Math.max(...projects.map(p=>new Date(rootTask(p).finish))) : null);
     $('controlList').innerHTML=projects.map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.fileName)}</small></div><span>${workTasks(p).length} activities</span><span>${fmt(rootTask(p).finish)}</span><span class="badge">Included</span></div>`).join('');
   }
   function renderTasks(tasks){const q=$('taskSearch').value.trim().toLowerCase(),filtered=tasks.filter(t=>!q||(t.name||'').toLowerCase().includes(q)||(t.project||'').toLowerCase().includes(q));$('taskCount').textContent=`${filtered.length} tasks`;$('taskRows').innerHTML=filtered.map(t=>{const s=status(t),pc=Math.round(t.percentComplete||0);return `<tr class="${t.summary?'summary':''}"><td class="task" style="padding-left:${13+(t.outlineLevel||0)*10}px">${esc(t.name)}</td><td>${esc(t.project)}</td><td>${fmt(t.start)}</td><td>${fmt(t.finish)}</td><td><span class="status-pill ${statusClass(s)}">${s}</span></td><td><div class="task-progress"><div class="progress"><i style="width:${pc}%"></i></div><span>${pc}%</span></div></td></tr>`}).join('')||'<tr><td colspan="6" class="empty">No matching tasks.</td></tr>'}
-  fetch('./projects.json').then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{projects=data;$('projectFilter').innerHTML='<option value="all">All Projects</option>'+projects.map((p,i)=>`<option value="${i}">${esc(p.name)}</option>`).join('');$('updated').textContent=`Updated ${fmt(new Date())}`;$('projectFilter').onchange=e=>{selected=e.target.value;render()};$('taskSearch').oninput=()=>renderTasks(currentProjects().flatMap(p=>workTasks(p).map(t=>({...t,project:p.name}))));render()}).catch(()=>{$('projectGrid').innerHTML='<div class="empty">Project data could not be loaded.</div>'});
+  function showProjects(data, updatedAt) {
+    projects = data;
+    selected = 'all';
+    $('projectFilter').innerHTML = '<option value="all">All Projects</option>' + data.map((p,i)=>`<option value="${i}">${esc(p.name)}</option>`).join('');
+    $('updated').textContent = `Updated ${fmt(updatedAt)}`;
+    if ($('kanbanProjectFilter')) $('kanbanProjectFilter').value = 'all';
+    render();
+    if (!$('kanbanPage').classList.contains('hidden')) renderKanban();
+  }
+  $('projectFilter').onchange=()=>{selected=$('projectFilter').value;render()};
+  $('taskSearch').oninput=()=>renderTasks(currentProjects().flatMap(p=>workTasks(p).map(t=>({...t,project:p.name}))));
   document.querySelectorAll('.nav-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x===btn));const page=btn.dataset.page;$('dashboardPage').classList.toggle('hidden',page!=='dashboard');$('controlPage').classList.toggle('hidden',page!=='control');$('kanbanPage').classList.toggle('hidden',page!=='kanban');$('pageTitle').textContent=page==='dashboard'?'Portfolio Dashboard':page==='control'?'Project Control':'MSP Kanban Board';if(page==='kanban'&&typeof renderKanban==='function')renderKanban()});
 </script>
 <link rel="stylesheet" href="reference.css">
@@ -136,5 +148,6 @@
 <script src="chart-interactions.js"></script>
 <link rel="stylesheet" href="kanban.css">
 <script src="kanban.js"></script>
+<script type="module" src="data-upload.mjs"></script>
 </body>
 </html>
