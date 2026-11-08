@@ -140,7 +140,7 @@
       }
     }
     $('scheduleDelayLabel').textContent = selected === 'all' ? 'Longest Project Delay' : 'Schedule Delay';
-    $('scheduleDelayValue').textContent = longestDelay ? longestDelay.months.toFixed(1) + ' mo' : '—';
+    $('scheduleDelayValue').textContent = longestDelay ? (longestDelay.months < 1 ? new Intl.NumberFormat('en', {style:'unit', unit:'day', unitDisplay:'long'}).format(Math.round(longestDelay.months * (365.2425 / 12))) : longestDelay.months.toFixed(1) + ' mo') : '—';
     $('scheduleDelayCard').title = longestDelay
       ? longestDelay.name + ' · Baseline finish ' + fmt(longestDelay.baseline) + ' · Scheduled finish ' + fmt(longestDelay.finish)
       : 'Baseline or scheduled finish unavailable';
