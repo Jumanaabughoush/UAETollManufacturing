@@ -39,6 +39,10 @@
     .sidebar > #uploadData { margin-top: 10px; width: 100%; }
     /* The rendered task table places Project in its third column. */
     #taskDetails table:has(thead th:nth-child(9)) tr > :nth-child(3) { display: none; }
+    #dashboardPage .kpi:has(#kpiTasks) { order: 1; }
+    #dashboardPage .kpi:has(#kpiPlanned) { order: 2; }
+    #scheduleDelayCard { order: 3; }
+    @media (min-width: 781px) { #dashboardPage .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   </style>
 </head>
 <body>
