@@ -22,6 +22,24 @@ const originalRender=render;
 const detailGrid=document.querySelector('.detail-grid');
 const milestonePanel=$('milestoneList').closest('article');
 milestonePanel.classList.add('milestone-panel');
+const milestoneList = $('milestoneList');
+milestoneList.addEventListener('click', event => {
+  const card = event.target.closest('.milestone[role="button"]');
+  if (!card) return;
+  const wasSelected = card.getAttribute('aria-pressed') === 'true';
+  milestoneList.querySelector('.milestone[aria-pressed="true"]')?.setAttribute('aria-pressed', 'false');
+  if (!wasSelected) card.setAttribute('aria-pressed', 'true');
+});
+milestoneList.addEventListener('keydown', event => {
+  if (!event.target.matches('.milestone[role="button"]')) return;
+  if (event.key === 'Escape') {
+    milestoneList.querySelector('.milestone[aria-pressed="true"]')?.setAttribute('aria-pressed', 'false');
+  }
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    event.target.click();
+  }
+});
 detailGrid.after(milestonePanel);
 const histogramPanel=document.createElement('article');
 histogramPanel.className='panel';
@@ -60,7 +78,7 @@ render=function(){
   $('histogram').innerHTML=bins.map((n,i)=>'<div class="hist-column"><strong>'+n+'</strong><div class="hist-bar" style="height:'+(n/max*200)+'px" aria-label="'+ranges[i]+': '+n+' tasks"></div><small>'+ranges[i]+'</small></div>').join('');
   const milestones=current.flatMap(p=>workTasks(p).filter(t=>t.milestone).map(t=>({...t,project:p.name}))).sort((a,b)=>new Date(a.finish)-new Date(b.finish));
   milestonePanel.querySelector('.panel-head span').textContent='Scheduled completion dates';
-  $('milestoneList').innerHTML=milestones.map(t=>'<div class="milestone"><strong>'+esc(t.name)+'</strong>'+(selected==='all'?'<small>'+esc(t.project)+'</small>':'')+'<time>'+fmt(t.finish)+'</time><span class="state">'+status(t)+'</span><div class="baseline-details"><span>Baseline: <time>'+fmt(t.baselineFinish)+'</time></span><span>Status: <b class="schedule-'+scheduleComparison(t).key+'">'+scheduleComparison(t).label+'</b></span></div></div>').join('')||'<p class="empty">No milestones recorded.</p>';
+  $('milestoneList').innerHTML=milestones.map(t=>'<div class="milestone" role="button" tabindex="0" aria-pressed="false"><strong>'+esc(t.name)+'</strong>'+(selected==='all'?'<small>'+esc(t.project)+'</small>':'')+'<time>'+fmt(t.finish)+'</time><span class="state">'+status(t)+'</span><div class="baseline-details"><span>Baseline: <time>'+fmt(t.baselineFinish)+'</time></span><span>Status: <b class="schedule-'+scheduleComparison(t).key+'">'+scheduleComparison(t).label+'</b></span></div></div>').join('')||'<p class="empty">No milestones recorded.</p>';
   renderGantt(current);
 };
 const taskTable = $('taskRows').closest('table');
