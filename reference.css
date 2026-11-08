@@ -155,7 +155,7 @@ main { padding: 32px var(--page-gutter) 50px; }
   .header-title { padding-left: 8px; }
   .topbar .toolbar { display: flex; }
   #importInfo:not([hidden]) { display: block; }
-  main { padding-top: 22px; }
+  main { padding-top: 30px; }
   .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .kpi { min-height: 132px; padding: 15px; }
 }
@@ -217,11 +217,12 @@ main::after {
 
 @media (hover: hover) and (pointer: fine) {
   .milestones { padding-top: 22px; }
-  .milestones .milestone { position: relative; transition: transform .18s ease, box-shadow .18s ease; }
+  .milestones .milestone { position: relative; transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease; }
   .milestones .milestone:hover {
     z-index: 1;
-    transform: translateY(-10px) scale(1.045);
-    box-shadow: 0 17px 30px rgba(0, 47, 86, .27), 0 4px 10px rgba(0, 47, 86, .12);
+    transform: translateY(-14px) scale(1.10);
+    background-color: #e4f8f3;
+    box-shadow: 0 0 0 2px #00a88f, 0 18px 34px rgba(0, 47, 86, .34);
   }
 }
 @media (prefers-reduced-motion: reduce) {
