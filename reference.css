@@ -261,3 +261,17 @@ main::after {
 }
 #dashboardPage .kpi-top { line-height: 1.35; }
 #dashboardPage .kpi-value { line-height: 1.15; font-variant-numeric: tabular-nums; }
+
+
+/* Dashboard type scale */
+.milestone-panel > .panel-head > span { display: none; }
+.topbar h1 { font-size: clamp(1.1rem, 1.5vw, 1.5rem); line-height: 1.25; }
+.section-head h2 { font-size: clamp(1.5rem, 2.3vw, 2rem); line-height: 1.2; }
+.panel-head h3, .detail-title { font-size: clamp(1.05rem, 1.4vw, 1.25rem); line-height: 1.3; }
+#dashboardPage .kpi-top { font-size: .875rem; }
+#dashboardPage .kpi-value { font-size: clamp(1.8rem, 2.7vw, 2.35rem); }
+.milestone strong, .legend-item, .gantt-controls label { font-size: .9375rem; }
+.milestone time, .milestone small, .milestone .state, .baseline-details,
+.panel-head span, .updated, .hist-column small { font-size: .8125rem; }
+#taskDetails th, .gantt-table thead th { font-size: .75rem; }
+#taskDetails td, .gantt-table .gantt-name, .project-list .list-row strong { font-size: .875rem; }
