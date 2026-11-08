@@ -57,7 +57,7 @@
     <div id="importInfo" class="updated" hidden><span id="importStatus" role="status"></span> <button id="resetData" type="button" hidden>Use published data</button></div>
     <main>
       <section id="dashboardPage">
-        <div class="section-head"><div><h2 id="overviewTitle">Project Portfolio Overview</h2><p>Track all product schedules from one place.</p></div><div class="toolbar"><div class="field select"><select id="projectFilter" aria-label="Filter project"><option value="all">All Projects</option></select></div><div class="field" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="taskSearch" type="search" placeholder="Search tasks" aria-label="Search tasks"></div></div></div>
+        <div class="section-head"><div><h2 id="overviewTitle">Project Portfolio Overview</h2><p>Track all product schedules from one place. <a href="#taskDetails" style="color:var(--blue);font-weight:700">View task filters and details ↓</a></p></div><div class="toolbar"><div class="field select"><select id="projectFilter" aria-label="Filter project"><option value="all">All Projects</option></select></div><div class="field" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="taskSearch" type="search" placeholder="Search tasks" aria-label="Search tasks"></div></div></div>
         <section class="kpis" aria-label="Portfolio KPIs">
           <article class="kpi" style="--accent:var(--blue)"><div class="kpi-top">Projects<span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5h16v14zM8 9h8M8 13h6"/></svg></span></div><div class="kpi-value" id="kpiProjects">—</div><div class="kpi-note">Product schedules</div></article>
           <article class="kpi" style="--accent:var(--cyan)"><div class="kpi-top">Total tasks<span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 3 3L19 4M5 20h14"/></svg></span></div><div class="kpi-value" id="kpiTasks">—</div><div class="kpi-note">Across selection</div></article>
@@ -69,7 +69,7 @@
         </section>
         <section class="panel projects"><div class="panel-head"><h3>Projects</h3><span id="projectCount">9 projects</span></div><div class="project-grid" id="projectGrid"></div></section>
         <section class="detail-grid"><article class="panel"><div class="panel-head"><h3>Task Status</h3><span id="statusCaption">All active tasks</span></div><div class="chart-body" id="statusChart"></div></article><article class="panel"><div class="panel-head"><h3>Key Milestones</h3><span>Next planned dates</span></div><div class="milestones" id="milestoneList"></div></article></section>
-        <section class="panel"><div class="panel-head"><h3>Task Details</h3><span id="taskCount"></span></div><div class="table-scroll"><table><thead><tr><th>Task</th><th>Project</th><th>Start</th><th>Finish</th><th>Status</th><th>Progress</th></tr></thead><tbody id="taskRows"></tbody></table></div></section>
+        <section class="panel" id="taskDetails"><div class="panel-head"><h3>Task Details</h3><span id="taskCount"></span></div><div class="table-scroll"><table><thead><tr><th>Task</th><th>Project</th><th>Start</th><th>Finish</th><th>Status</th><th>Progress</th></tr></thead><tbody id="taskRows"></tbody></table></div></section>
       </section>
       <section id="controlPage" class="hidden">
         <div class="section-head"><div><h2>Project Control</h2><p>Projects currently included in the dashboard.</p></div></div>
@@ -150,7 +150,7 @@
 </script>
 <link rel="stylesheet" href="reference.css">
 <script src="schedule.js"></script>
-<script src="reference.js"></script>
+<script src="reference.js?v=1afaab85"></script>
 <script src="chart-interactions.js"></script>
 <link rel="stylesheet" href="kanban.css">
 <script src="kanban.js"></script>
