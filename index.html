@@ -68,6 +68,7 @@
           <article class="kpi" style="--accent:var(--red)"><div class="kpi-top">Overdue<span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/></svg></span></div><div class="kpi-value" id="kpiOverdue">—</div><div class="kpi-note" hidden>Past planned finish</div></article>
           <article class="kpi" style="--accent:var(--cyan)"><div class="kpi-top">Planned Progress<span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg></span></div><div class="kpi-value" id="kpiPlanned">—</div><div class="kpi-note" hidden>Baseline progress as of today</div></article>
           <article class="kpi" style="--accent:var(--red)"><div class="kpi-top">Behind Schedule<span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></span></div><div class="kpi-value" id="kpiBehind">—</div><div class="kpi-note" hidden>Relative to planned progress</div></article>
+          <article class="kpi" style="--accent:var(--red)" id="scheduleDelayCard"><div class="kpi-top" id="scheduleDelayLabel">Schedule Delay</div><div class="kpi-value" id="scheduleDelayValue">—</div></article>
         </section>
         <section class="panel projects"><div class="panel-head"><h3>Projects</h3><span id="projectCount">9 projects</span></div><div class="project-grid" id="projectGrid"></div></section>
         <section class="detail-grid"><article class="panel"><div class="panel-head"><h3>Task Status</h3><span id="statusCaption">All active tasks</span></div><div class="chart-body" id="statusChart"></div></article><article class="panel"><div class="panel-head"><h3>Key Milestones</h3><span>Next planned dates</span></div><div class="milestones" id="milestoneList"></div></article></section>
@@ -127,6 +128,22 @@
     const plannedProgress=tasks.length?tasks.reduce((sum,t)=>sum+plannedTaskProgress(t),0)/tasks.length:0;
     const behindSchedule=plannedProgress>0?Math.max(0,(plannedProgress-actualProgress)/plannedProgress*100):0;
     $('kpiProjects').textContent=current.length;$('kpiTasks').textContent=tasks.length;$('kpiCompleted').textContent=completed;$('kpiMilestones').textContent=milestones.length;$('kpiOverdue').textContent=overdue;$('kpiPlanned').textContent=`${Math.round(plannedProgress)}%`;$('kpiBehind').textContent=`${Math.round(behindSchedule)}%`;
+    let longestDelay = null;
+    for (const project of current) {
+      const baseline = rootTask(project)?.baselineFinish;
+      const finish = project.finish || rootTask(project)?.finish;
+      const elapsed = Date.parse(finish?.slice(0,10)) - Date.parse(baseline?.slice(0,10));
+      if (!Number.isFinite(elapsed)) continue;
+      const months = Math.max(0, elapsed / day / (365.2425 / 12));
+      if (!longestDelay || months > longestDelay.months) {
+        longestDelay = {months, baseline, finish, name:project.name};
+      }
+    }
+    $('scheduleDelayLabel').textContent = selected === 'all' ? 'Longest Project Delay' : 'Schedule Delay';
+    $('scheduleDelayValue').textContent = longestDelay ? longestDelay.months.toFixed(1) + ' mo' : '—';
+    $('scheduleDelayCard').title = longestDelay
+      ? longestDelay.name + ' · Baseline finish ' + fmt(longestDelay.baseline) + ' · Scheduled finish ' + fmt(longestDelay.finish)
+      : 'Baseline or scheduled finish unavailable';
     $('projectCount').textContent=`${current.length} project${current.length===1?'':'s'}`;
     $('projectGrid').innerHTML=current.map(p=>{const i=projects.indexOf(p),rt=rootTask(p),pct=progress(p);return `<button class="project-card ${String(i)===selected?'selected':''}" data-project="${i}"><div class="project-card-top"><div class="project-name">${esc(p.name)}</div><span class="badge">${pct?'In progress':'Planned'}</span></div><div class="project-meta"><span>${fmt(rt.start)}</span><span>${fmt(rt.finish)}</span></div><div class="progress"><i style="width:${pct}%"></i></div><div class="progress-label">${pct}% complete · ${workTasks(p).length} tasks</div></button>`}).join('');
     document.querySelectorAll('.project-card').forEach(b=>b.onclick=()=>{$('projectFilter').value=b.dataset.project;selected=b.dataset.project;render()});
