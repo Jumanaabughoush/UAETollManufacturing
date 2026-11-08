@@ -6,7 +6,7 @@ renderTasks=function(tasks){
 };
 function drawInteractiveDonut(){
   const tasks=currentProjects().flatMap(workTasks);
-  const names=['Completed','In Progress','Upcoming','Overdue'],colors=['#007e70','#002f56','#b7dcd0','#7189a3'];
+  const names=['Completed','In Progress','Upcoming','Overdue'],colors=['#007e70','#002f56','#b7dcd0','#cc5266'];
   const counts=names.map(s=>tasks.filter(t=>status(t)===s).length),total=tasks.length;
   let offset=0;
   const segments=names.map((s,i)=>{
