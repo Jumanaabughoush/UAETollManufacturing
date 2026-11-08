@@ -200,3 +200,16 @@ main::after {
 @media (max-width: 780px) {
   .sidebar { position: relative; --slide-rail: 14px; border-right: 0; }
 }
+
+
+/* Sidebar wordmark */
+.sidebar .logo { display: block; padding: 3px 0 0; }
+.sidebar .logo-mark { display: none; }
+.sidebar .logo strong {
+  color: var(--slide-navy);
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
