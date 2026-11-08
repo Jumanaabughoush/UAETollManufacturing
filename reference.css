@@ -244,3 +244,20 @@ main::after {
   background-color: #e4f8f3;
   box-shadow: 0 0 0 2px #00a88f, 0 18px 34px rgba(168, 232, 191, .55);
 }
+
+
+/* Executive overview cards */
+#dashboardPage .kpi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 132px;
+  border-color: #e2ece9;
+  border-radius: 16px;
+  box-shadow: 0 2px 5px rgba(19, 62, 59, .04), 0 10px 24px rgba(19, 62, 59, .08);
+}
+#dashboardPage .kpi[hidden], #dashboardPage .kpi::before, #dashboardPage .kpi-icon {
+  display: none;
+}
+#dashboardPage .kpi-top { line-height: 1.35; }
+#dashboardPage .kpi-value { line-height: 1.15; font-variant-numeric: tabular-nums; }
