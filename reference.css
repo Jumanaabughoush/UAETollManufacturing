@@ -216,11 +216,12 @@ main::after {
 
 
 @media (hover: hover) and (pointer: fine) {
+  .milestones { padding-top: 22px; }
   .milestones .milestone { position: relative; transition: transform .18s ease, box-shadow .18s ease; }
   .milestones .milestone:hover {
     z-index: 1;
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 12px 24px rgba(0, 47, 86, .17);
+    transform: translateY(-10px) scale(1.045);
+    box-shadow: 0 17px 30px rgba(0, 47, 86, .27), 0 4px 10px rgba(0, 47, 86, .12);
   }
 }
 @media (prefers-reduced-motion: reduce) {
