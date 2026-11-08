@@ -329,3 +329,24 @@ main::after {
   #taskDetails > .panel-head { padding-inline: 14px; }
   #taskDetails > .gantt-legend { margin-inline: 14px; }
 }
+
+
+/* Compact sidebar controls */
+.sidebar nav { gap: 5px; }
+.sidebar .nav-btn { min-height: 42px; padding: 9px 11px; gap: 9px; font-size: .875rem; line-height: 1.25; }
+.sidebar .nav-btn svg { width: 16px; height: 16px; }
+.sidebar > #uploadData {
+  min-height: 38px;
+  padding: 7px 11px;
+  border: 1px solid #d1e4df;
+  border-radius: 8px;
+  background: #f1f8f6;
+  color: var(--blue);
+  font-size: .875rem;
+  line-height: 1.25;
+  box-shadow: none;
+}
+.sidebar > #uploadData:hover:not(:disabled) { background: #e7f3ef; }
+@media (max-width: 780px) {
+  .sidebar .nav-btn { padding-inline: 5px; gap: 5px; font-size: .8125rem; }
+}
