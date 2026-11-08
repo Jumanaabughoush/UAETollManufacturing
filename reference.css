@@ -229,3 +229,18 @@ main::after {
   .milestones .milestone { transition: none; }
   .milestones .milestone:hover { transform: none; }
 }
+
+
+/* Keep the selected milestone clear while de-emphasizing its neighbors. */
+.milestones .milestone[role="button"] { cursor: pointer; }
+.milestones .milestone:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.milestones:has(.milestone[aria-pressed="true"]) .milestone[aria-pressed="false"] {
+  filter: blur(2.5px);
+  opacity: .62;
+}
+.milestones .milestone[aria-pressed="true"] {
+  position: relative;
+  z-index: 2;
+  background-color: #e4f8f3;
+  box-shadow: 0 0 0 2px #00a88f, 0 18px 34px rgba(168, 232, 191, .55);
+}
