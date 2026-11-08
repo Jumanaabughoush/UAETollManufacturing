@@ -241,8 +241,8 @@ main::after {
 .milestones .milestone[aria-pressed="true"] {
   position: relative;
   z-index: 2;
-  background-color: #e4f8f3;
-  box-shadow: 0 0 0 2px #00a88f, 0 18px 34px rgba(168, 232, 191, .55);
+  background-color: var(--white);
+  box-shadow: 0 0 0 1px #d9e4e1, 0 5px 12px rgba(30, 41, 59, .07), 0 12px 26px rgba(30, 41, 59, .12);
 }
 
 
