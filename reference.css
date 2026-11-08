@@ -350,3 +350,34 @@ main::after {
 @media (max-width: 780px) {
   .sidebar .nav-btn { padding-inline: 5px; gap: 5px; font-size: .8125rem; }
 }
+
+
+/* Progress Distribution hover */
+@media (hover: hover) {
+  #histogram .hist-column { position: relative; }
+  #histogram .hist-bar { position: relative; transition: box-shadow .16s ease, filter .16s ease; }
+  #histogram .hist-column:hover { z-index: 1; }
+  #histogram .hist-column:hover .hist-bar {
+    filter: brightness(1.08);
+    box-shadow: 0 4px 13px rgba(0, 126, 112, .2);
+  }
+  #histogram .hist-column:hover .hist-bar::after {
+    content: attr(aria-label);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 26px);
+    transform: translateX(-50%);
+    padding: 5px 9px;
+    border-radius: 6px;
+    background: var(--navy);
+    color: var(--white);
+    font-size: .75rem;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  #histogram .hist-column:first-child .hist-bar::after { left: 0; transform: none; }
+  #histogram .hist-column:last-child .hist-bar::after { left: auto; right: 0; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #histogram .hist-bar { transition: none; }
+}
