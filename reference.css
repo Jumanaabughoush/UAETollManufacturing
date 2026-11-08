@@ -69,3 +69,97 @@ th{background:#f3f8f6;color:var(--muted)}tbody tr:hover td{background:#f7fbf9}
 @media(max-width:780px){.topbar{padding:10px 16px;min-height:106px}.company-logo{width:105px;height:92px}.header-brand{gap:10px}.header-title{padding-left:14px}.company-label{font-size:11px;letter-spacing:.05em}.topbar h1{font-size:20px}.topbar .updated{display:none}}
 @media(max-width:450px){.company-logo{width:90px;height:79px}.topbar h1{font-size:18px}.header-title{padding-left:10px}}
 table tbody td:hover,table tbody th:hover{font-weight:700;color:#007e70;text-shadow:0 0 7px rgba(0,168,143,.28);transition:font-weight .12s ease,color .12s ease,text-shadow .12s ease}
+
+/* Portfolio layout */
+.app { --sidebar-width: clamp(238px, 15.75vw, 300px); --page-gutter: clamp(20px, 2vw, 36px); }
+.sidebar {
+  position: fixed;
+  width: var(--sidebar-width);
+  padding: 20px 17px 26px;
+  background: var(--navy);
+  color: var(--white);
+}
+.logo { display: flex; padding: 0 10px; border: 0; }
+.logo strong { font-size: 1.2rem; }
+.logo-mark { flex-shrink: 0; width: 44px; height: 44px; }
+.sidebar nav {
+  display: grid;
+  margin-top: 40px;
+  padding: 0;
+  border: 0;
+}
+.sidebar nav::before {
+  content: "Workspace";
+  padding: 0 13px 5px;
+  color: #b9d2cf;
+  font-size: .75rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.sidebar .nav-btn { padding: 15px 14px; color: #d4e7e4; font-size: 1rem; }
+.sidebar .nav-btn svg { flex-shrink: 0; }
+.sidebar .nav-btn.active, .sidebar .nav-btn:hover { background: var(--navy-2); color: var(--white); }
+.shell { margin-left: var(--sidebar-width); }
+.topbar { min-height: 74px; padding: 8px var(--page-gutter); }
+.header-brand { gap: 14px; }
+.company-logo { width: 68px; height: 58px; }
+.header-title { padding-left: 14px; }
+.company-label { margin-bottom: 0; }
+.topbar .toolbar { align-items: center; flex-shrink: 0; }
+#importInfo { padding: 8px var(--page-gutter) 0; }
+main { padding: 32px var(--page-gutter) 50px; }
+#dashboardPage .section-head p { display: block; }
+#dashboardPage .section-head .toolbar { flex-wrap: nowrap; }
+#dashboardPage .field select, #dashboardPage .field input { height: 54px; width: clamp(145px, 16vw, 330px); min-width: 0; }
+#dashboardPage .field svg { top: 18px; }
+#dashboardPage .field.select::after { top: 14px; }
+.kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.kpi { min-height: 156px; }
+.kpi::before {
+  display: block;
+  inset: -27px -20px auto auto;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent, var(--blue)) 14%, var(--white));
+}
+.kpi-icon { visibility: hidden; width: 27px; height: 23px; }
+.kpi-top, .kpi-value, .kpi-note { position: relative; }
+.projects.panel { background: transparent; border: 0; box-shadow: none; overflow: visible; }
+.projects .panel-head { padding: 8px 0 12px; }
+.project-grid { padding: 0; gap: 18px; }
+.project-card { min-height: 170px; padding: 21px; border-radius: 20px; box-shadow: var(--shadow); }
+.project-name { font-size: 1.08rem; }
+.project-card .progress { height: 9px; }
+.project-card .progress-label { margin-top: 9px; }
+
+@media (min-width: 1600px) {
+  .kpis { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .kpi { padding: 20px; }
+}
+@media (max-width: 1150px) {
+  .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #dashboardPage .section-head { align-items: stretch; flex-direction: column; }
+  #dashboardPage .section-head .toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #dashboardPage .field select, #dashboardPage .field input { width: 100%; }
+}
+@media (max-width: 780px) {
+  .sidebar { position: static; width: auto; padding: 12px var(--page-gutter); }
+  .sidebar nav { display: flex; gap: 4px; margin-top: 10px; }
+  .sidebar nav::before { display: none; }
+  .sidebar .nav-btn { padding: 9px 6px; font-size: .85rem; }
+  .shell { margin-left: 0; }
+  .topbar { gap: 8px; }
+  .company-logo { width: 50px; height: 46px; }
+  .header-brand { gap: 7px; }
+  .header-title { padding-left: 8px; }
+  .topbar .toolbar { display: flex; }
+  #importInfo:not([hidden]) { display: block; }
+  main { padding-top: 22px; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .kpi { min-height: 132px; padding: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-card { transition: none; }
+  .project-card:hover { transform: none; }
+}
