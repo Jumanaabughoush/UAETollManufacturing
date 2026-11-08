@@ -63,12 +63,41 @@ render=function(){
   $('milestoneList').innerHTML=milestones.map(t=>'<div class="milestone"><strong>'+esc(t.name)+'</strong>'+(selected==='all'?'<small>'+esc(t.project)+'</small>':'')+'<time>'+fmt(t.finish)+'</time><span class="state">'+status(t)+'</span><div class="baseline-details"><span>Baseline: <time>'+fmt(t.baselineFinish)+'</time></span><span>Status: <b class="schedule-'+scheduleComparison(t).key+'">'+scheduleComparison(t).label+'</b></span></div></div>').join('')||'<p class="empty">No milestones recorded.</p>';
   renderGantt(current);
 };
+const taskTable = $('taskRows').closest('table');
+const taskControls = document.createElement('div');
+taskControls.className = 'gantt-controls gantt-legend';
+taskControls.innerHTML = '<label>Status <select id="detailStatus"><option value="">All statuses</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
+  + '<label>Sort by <select id="detailSort"><option value="">Schedule order</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option></select></label>'
+  + '<label><input type="checkbox" id="detailCritical"> Critical only</label>'
+  + '<button type="button" id="detailReset">Reset filters</button>';
+taskTable.closest('.table-scroll').before(taskControls);
+const refreshTaskDetails = () => renderTasks(currentProjects().flatMap(p => workTasks(p).map(t => ({...t, project:p.name}))));
+taskControls.addEventListener('change', refreshTaskDetails);
+$('detailReset').onclick = () => {
+  $('detailStatus').value = $('detailSort').value = '';
+  $('detailCritical').checked = false;
+  if ($('clearDonut')) $('clearDonut').click();
+  else refreshTaskDetails();
+};
+
 renderTasks=function(tasks){
   const q=$('taskSearch').value.trim().toLowerCase();
-  const filtered=tasks.filter(t=>!q||(t.name||'').toLowerCase().includes(q)||(t.project||'').toLowerCase().includes(q));
+  const filterStatus = $('detailStatus').value;
+  const criticalOnly = $('detailCritical').checked;
+  const filtered = tasks.filter(t =>
+    (!filterStatus || status(t) === filterStatus) &&
+    (!criticalOnly || t.critical) &&
+    (!q || (t.name || '').toLowerCase().includes(q) || (t.project || '').toLowerCase().includes(q))
+  );
+  const sort = $('detailSort').value;
+  if (sort === 'finish') filtered.sort((a,b) => (Date.parse(a.finish) || Infinity) - (Date.parse(b.finish) || Infinity));
+  if (sort === 'progress') filtered.sort((a,b) => (a.percentComplete || 0) - (b.percentComplete || 0));
   $('taskCount').textContent=filtered.length+' of '+tasks.length+' tasks';
   const table=$('taskRows').closest('table');
   table.querySelector('thead').innerHTML='<tr><th>ID</th><th>Task Name</th><th>Project</th><th>Start</th><th>Finish</th><th>Progress</th><th>Critical</th><th>Status</th><th title="Working days after baseline finish; Friday and Saturday excluded; actual finish for completed tasks, today for unfinished tasks">Baseline Delay (workdays)</th></tr>';
-  $('taskRows').innerHTML=filtered.map(t=>'<tr><td>'+t.id+'</td><td class="task">'+esc(t.name)+'</td><td>'+esc(t.project)+'</td><td>'+fmt(t.start)+'</td><td>'+fmt(t.finish)+'</td><td>'+Math.round(t.percentComplete||0)+'%</td><td>'+(t.critical?'Yes':'No')+'</td><td><span class="status-pill '+statusClass(status(t))+'">'+status(t)+'</span></td>'+baselineDelayCell(t)+'</tr>').join('')||'<tr><td colspan="9" class="empty">No matching tasks.</td></tr>';
+  $('taskRows').innerHTML=filtered.map((t,index)=>'<tr><td>'+t.id+'</td><td class="task"><button type="button" class="gantt-task-button" data-detail-task="'+index+'">'+esc(t.name)+'</button></td><td>'+esc(t.project)+'</td><td>'+fmt(t.start)+'</td><td>'+fmt(t.finish)+'</td><td>'+Math.round(t.percentComplete||0)+'%</td><td>'+(t.critical?'Yes':'No')+'</td><td><span class="status-pill '+statusClass(status(t))+'">'+status(t)+'</span></td>'+baselineDelayCell(t)+'</tr>').join('')||'<tr><td colspan="9" class="empty">No matching tasks.</td></tr>';
+  $('taskRows').querySelectorAll('[data-detail-task]').forEach(button => {
+    button.onclick = () => showGanttTask(filtered[Number(button.dataset.detailTask)]);
+  });
 };
 if(projects.length)render();
