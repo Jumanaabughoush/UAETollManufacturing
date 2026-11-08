@@ -148,9 +148,9 @@
   $('taskSearch').oninput=()=>renderTasks(currentProjects().flatMap(p=>workTasks(p).map(t=>({...t,project:p.name}))));
   document.querySelectorAll('.nav-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x===btn));const page=btn.dataset.page;$('dashboardPage').classList.toggle('hidden',page!=='dashboard');$('controlPage').classList.toggle('hidden',page!=='control');$('kanbanPage').classList.toggle('hidden',page!=='kanban');$('pageTitle').textContent=page==='dashboard'?'Portfolio Dashboard':page==='control'?'Project Control':'MSP Kanban Board';if(page==='kanban'&&typeof renderKanban==='function')renderKanban()});
 </script>
-<link rel="stylesheet" href="reference.css?v=d42dafe6">
+<link rel="stylesheet" href="reference.css?v=db24b890">
 <script src="schedule.js"></script>
-<script src="reference.js?v=4d27360d"></script>
+<script src="reference.js?v=c65ab3d4"></script>
 <script src="chart-interactions.js"></script>
 <link rel="stylesheet" href="kanban.css">
 <script src="kanban.js"></script>
