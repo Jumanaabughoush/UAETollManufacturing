@@ -88,7 +88,7 @@ reset.onclick = () => {
   try {
     localStorage.removeItem(storageKey);
     local = null;
-    display('Showing the published schedules.');
+    display('');
   } catch {
     display('Could not clear browser storage.');
   }
