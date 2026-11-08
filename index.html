@@ -70,6 +70,8 @@
       .sidebar[hidden] + .shell { margin-left: 70px; }
       .sidebar[hidden] + .shell #sidebarToggle { left: 36px; }
     }
+    .collapsed-project-name { display: none; }
+    #workspaceSidebar[hidden] + .shell .collapsed-project-name { display: block; color: var(--slide-navy, var(--navy)); font-size: clamp(.85rem, 1.5vw, 1.1rem); line-height: 1.25; }
   </style>
 </head>
 <body>
@@ -85,7 +87,7 @@
     <div class="side-foot"><div class="private"><i></i>Private dashboard</div>Microsoft Project portfolio</div>
   </aside>
   <div class="shell">
-    <header class="topbar"><div class="header-brand"><button id="sidebarToggle" type="button" aria-controls="workspaceSidebar" aria-expanded="true" aria-label="Hide sidebar" title="Hide sidebar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m14 6-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><img class="company-logo" src="dar-aldawa-logo.png" alt="دار الدواء — Dar Aldawa" width="126" height="110"><div class="header-title"><span class="company-label">DAR ALDAWA</span><h1 id="pageTitle">Portfolio Dashboard</h1></div></div><div class="toolbar"><div class="updated" id="updated">Updated today</div></div></header>
+    <header class="topbar"><div class="header-brand"><button id="sidebarToggle" type="button" aria-controls="workspaceSidebar" aria-expanded="true" aria-label="Hide sidebar" title="Hide sidebar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m14 6-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><img class="company-logo" src="dar-aldawa-logo.png" alt="دار الدواء — Dar Aldawa" width="126" height="110"><div class="header-title"><span class="company-label">DAR ALDAWA</span><strong class="collapsed-project-name">UAE Toll Manufacturing</strong><h1 id="pageTitle">Portfolio Dashboard</h1></div></div><div class="toolbar"><div class="updated" id="updated">Updated today</div></div></header>
     <input id="scheduleFiles" type="file" accept=".mpp,.xml" multiple hidden>
     <div id="importInfo" class="updated" hidden><span id="importStatus" role="status"></span> <button id="resetData" type="button" hidden>Use published data</button></div>
     <main>
