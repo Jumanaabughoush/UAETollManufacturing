@@ -65,7 +65,10 @@
     .sidebar[hidden] + .shell .collapsed-project-name { display: block; color: var(--slide-navy, var(--navy)); font-size: clamp(.85rem, 1.5vw, 1.1rem); line-height: 1.25; }
     @media (min-width: 781px) {
       #sidebarToggle { position: fixed; z-index: 31; top: 100px; left: calc(var(--sidebar-width) - 1px); width: 29px; height: 48px; }
-      .sidebar[hidden] + .shell #sidebarToggle { left: 0; }
+      .sidebar[hidden] { display: block; width: var(--slide-rail); padding: 0; border: 0; pointer-events: none; }
+      .sidebar[hidden] > * { display: none; }
+      .sidebar[hidden] + .shell { margin-left: 37px; }
+      .sidebar[hidden] + .shell #sidebarToggle { left: 36px; }
       .sidebar[hidden] + .shell .topbar { padding-left: max(var(--page-gutter), 42px); }
     }
   </style>
