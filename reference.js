@@ -64,6 +64,36 @@ render=function(){
   renderGantt(current);
 };
 const taskTable = $('taskRows').closest('table');
+const taskCount = $('taskCount');
+const taskHeaderActions = document.createElement('div');
+taskHeaderActions.className = 'gantt-controls';
+taskHeaderActions.style.alignItems = 'center';
+taskHeaderActions.style.gap = '10px';
+const exportTasks = document.createElement('button');
+exportTasks.type = 'button';
+exportTasks.textContent = 'Export to Excel';
+exportTasks.style.padding = '4px 9px';
+exportTasks.disabled = true;
+taskCount.before(taskHeaderActions);
+taskHeaderActions.append(taskCount, exportTasks);
+
+exportTasks.onclick = () => {
+  const csvCell = cell => {
+    let value = cell.textContent.trim();
+    if (/^[=+@-]/.test(value)) value = "'" + value;
+    return '"' + value.replaceAll('"', '""') + '"';
+  };
+  const csv = Array.from(taskTable.rows, row => Array.from(row.cells, csvCell).join(',')).join('\r\n');
+  const url = URL.createObjectURL(new Blob(['\uFEFF', csv], {type:'text/csv;charset=utf-8'}));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'UAE Toll Manufacturing - Task Details.csv';
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
+
 const taskControls = document.createElement('div');
 taskControls.className = 'gantt-controls gantt-legend';
 taskControls.innerHTML = '<label>Status <select id="detailStatus"><option value="">All statuses</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
@@ -92,6 +122,7 @@ renderTasks=function(tasks){
   const sort = $('detailSort').value;
   if (sort === 'finish') filtered.sort((a,b) => (Date.parse(a.finish) || Infinity) - (Date.parse(b.finish) || Infinity));
   if (sort === 'progress') filtered.sort((a,b) => (a.percentComplete || 0) - (b.percentComplete || 0));
+  exportTasks.disabled = filtered.length === 0;
   $('taskCount').textContent=filtered.length+' of '+tasks.length+' tasks';
   const table=$('taskRows').closest('table');
   table.querySelector('thead').innerHTML='<tr><th>ID</th><th>Task Name</th><th>Project</th><th>Start</th><th>Finish</th><th>Progress</th><th>Critical</th><th>Status</th><th title="Working days after baseline finish; Friday and Saturday excluded; actual finish for completed tasks, today for unfinished tasks">Baseline Delay (workdays)</th></tr>';
