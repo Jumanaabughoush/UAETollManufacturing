@@ -61,8 +61,6 @@
     #sidebarToggle:hover { background: #e1f3ed; }
     #sidebarToggle:active { box-shadow: 1px 1px 0 #b5d2c9; transform: translateY(2px); }
     #sidebarToggle[aria-expanded="false"] svg { transform: rotate(180deg); }
-    .collapsed-project-name { display: none; }
-    .sidebar[hidden] + .shell .collapsed-project-name { display: block; color: var(--slide-navy, var(--navy)); font-size: clamp(.85rem, 1.5vw, 1.1rem); line-height: 1.25; }
     @media (min-width: 781px) {
       #sidebarToggle { position: fixed; z-index: 31; top: 100px; left: calc(var(--sidebar-width) - 1px); width: 29px; height: 48px; }
       .sidebar[hidden] { display: block; width: var(--slide-rail); padding: 0; border: 0; pointer-events: none; }
@@ -87,7 +85,7 @@
     <div class="side-foot"><div class="private"><i></i>Private dashboard</div>Microsoft Project portfolio</div>
   </aside>
   <div class="shell">
-    <header class="topbar"><div class="header-brand"><button id="sidebarToggle" type="button" aria-controls="workspaceSidebar" aria-expanded="true" aria-label="Hide sidebar" title="Hide sidebar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m14 6-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><img class="company-logo" src="dar-aldawa-logo.png" alt="دار الدواء — Dar Aldawa" width="126" height="110"><div class="header-title"><span class="company-label">DAR ALDAWA</span><strong class="collapsed-project-name">UAE Toll Manufacturing</strong><h1 id="pageTitle">Portfolio Dashboard</h1></div></div><div class="toolbar"><div class="updated" id="updated">Updated today</div></div></header>
+    <header class="topbar"><div class="header-brand"><button id="sidebarToggle" type="button" aria-controls="workspaceSidebar" aria-expanded="true" aria-label="Hide sidebar" title="Hide sidebar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m14 6-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><img class="company-logo" src="dar-aldawa-logo.png" alt="دار الدواء — Dar Aldawa" width="126" height="110"><div class="header-title"><span class="company-label">DAR ALDAWA</span><h1 id="pageTitle">Portfolio Dashboard</h1></div></div><div class="toolbar"><div class="updated" id="updated">Updated today</div></div></header>
     <input id="scheduleFiles" type="file" accept=".mpp,.xml" multiple hidden>
     <div id="importInfo" class="updated" hidden><span id="importStatus" role="status"></span> <button id="resetData" type="button" hidden>Use published data</button></div>
     <main>
