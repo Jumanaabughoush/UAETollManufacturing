@@ -57,7 +57,7 @@
     <div id="importInfo" class="updated" hidden><span id="importStatus" role="status"></span> <button id="resetData" type="button" hidden>Use published data</button></div>
     <main>
       <section id="dashboardPage">
-        <div class="section-head"><div><h2>Project Portfolio Overview</h2><p>Track all product schedules from one place.</p></div><div class="toolbar"><div class="field select"><select id="projectFilter" aria-label="Filter project"><option value="all">All Projects</option></select></div><div class="field" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="taskSearch" type="search" placeholder="Search tasks" aria-label="Search tasks"></div></div></div>
+        <div class="section-head"><div><h2 id="overviewTitle">Project Portfolio Overview</h2><p>Track all product schedules from one place.</p></div><div class="toolbar"><div class="field select"><select id="projectFilter" aria-label="Filter project"><option value="all">All Projects</option></select></div><div class="field" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="taskSearch" type="search" placeholder="Search tasks" aria-label="Search tasks"></div></div></div>
         <section class="kpis" aria-label="Portfolio KPIs">
           <article class="kpi" style="--accent:var(--blue)"><div class="kpi-top">Projects<span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5h16v14zM8 9h8M8 13h6"/></svg></span></div><div class="kpi-value" id="kpiProjects">—</div><div class="kpi-note">Product schedules</div></article>
           <article class="kpi" style="--accent:var(--cyan)"><div class="kpi-top">Total tasks<span class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 3 3L19 4M5 20h14"/></svg></span></div><div class="kpi-value" id="kpiTasks">—</div><div class="kpi-note">Across selection</div></article>
@@ -116,6 +116,10 @@
   function currentProjects(){return selected==='all'?projects:projects.filter((_,i)=>String(i)===selected)}
   function render(){
     const current=currentProjects(), tasks=current.flatMap(p=>workTasks(p).map(t=>({...t,project:p.name}))), milestones=current.flatMap(p=>workTasks(p).filter(t=>t.milestone).map(t=>({...t,project:p.name})));
+    const projectName = selected === 'all' ? null : current[0]?.name;
+    $('overviewTitle').textContent = projectName
+      ? projectName.replace(/\s+project$/i, '') + ' Project Overview'
+      : 'Project Portfolio Overview';
     const completed=tasks.filter(t=>status(t)==='Completed').length, overdue=tasks.filter(t=>status(t)==='Overdue').length;
     const actualProgress=tasks.length?tasks.reduce((sum,t)=>sum+(t.percentComplete||0),0)/tasks.length:0;
     const plannedProgress=tasks.length?tasks.reduce((sum,t)=>sum+plannedTaskProgress(t),0)/tasks.length:0;
