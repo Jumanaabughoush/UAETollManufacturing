@@ -11,7 +11,12 @@ const scheduleDate = value => Number.isFinite(value)
 const projectKey = name => name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 
 export function convertProject(project, fileName) {
-  const tasks = project.tasks
+  // MPXJ exposes the project summary separately from the activity list.
+  const summary = project.summary;
+  const sourceTasks = summary && !project.tasks.some(task => task.id === 0)
+    ? [{...summary, id: 0, summary: true}, ...project.tasks]
+    : project.tasks;
+  const tasks = sourceTasks
     .filter(task => task.name && task.name.trim() !== 'TT File Preparation & Gap Assessment Initiation')
     .map(task => ({
       id: task.id,
