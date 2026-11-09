@@ -72,6 +72,12 @@
     }
     .collapsed-project-name { display: none; }
     #workspaceSidebar[hidden] + .shell .collapsed-project-name { display: block; color: var(--slide-navy, var(--navy)); font-size: clamp(.85rem, 1.5vw, 1.1rem); line-height: 1.25; }
+    #baselineDelayToggle { border: 1px solid var(--line); border-radius: 6px; background: var(--white); color: var(--blue); cursor: pointer; min-width: 25px; min-height: 25px; }
+    #baselineDelayToggle::before { content: "‹"; font-size: 1rem; }
+    #baselineDelayToggle[aria-expanded="false"]::before { content: "›"; }
+    #taskDetails .baseline-delay-collapsed .baseline-delay-label { display: none; }
+    #taskDetails .baseline-delay-collapsed thead th:last-child { width: 1%; white-space: nowrap; }
+    #taskDetails .baseline-delay-collapsed tbody td:last-child:not([colspan]) { visibility: hidden; font-size: 0; padding-inline: 0; }
   </style>
 </head>
 <body>
@@ -211,7 +217,7 @@
 </script>
 <link rel="stylesheet" href="reference.css?v=cdaad446">
 <script src="schedule.js"></script>
-<script src="reference.js?v=fbd42dfb"></script>
+<script src="reference.js?v=c0d03c82"></script>
 <script src="chart-interactions.js?v=ac7b60ae"></script>
 <link rel="stylesheet" href="kanban.css">
 <script src="kanban.js"></script>
