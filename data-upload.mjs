@@ -109,7 +109,7 @@ try {
   const response = await fetch('./projects.json');
   if (!response.ok) throw new Error('Published schedules unavailable.');
   published = await response.json();
-  display(local ? 'Showing imported schedules saved on this browser.' : '');
+  display('');
 } catch {
   if (local) display('Showing imported schedules. Published data could not be loaded.');
   else $('projectGrid').textContent = 'Project data could not be loaded.';
