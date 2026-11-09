@@ -82,6 +82,13 @@ render=function(){
   renderGantt(current);
 };
 const taskTable = $('taskRows').closest('table');
+taskTable.addEventListener('click', event => {
+  const button = event.target.closest('#baselineDelayToggle');
+  if (!button) return;
+  const collapsed = taskTable.classList.toggle('baseline-delay-collapsed');
+  button.setAttribute('aria-expanded', String(!collapsed));
+  button.setAttribute('aria-label', collapsed ? 'Show baseline delay' : 'Hide baseline delay');
+});
 const taskCount = $('taskCount');
 const taskHeaderActions = document.createElement('div');
 taskHeaderActions.className = 'gantt-controls';
@@ -143,7 +150,7 @@ renderTasks=function(tasks){
   exportTasks.disabled = filtered.length === 0;
   $('taskCount').textContent=filtered.length+' of '+tasks.length+' tasks';
   const table=$('taskRows').closest('table');
-  table.querySelector('thead').innerHTML='<tr><th>ID</th><th>Task Name</th><th>Project</th><th>Start</th><th>Finish</th><th>Baseline Finish</th><th>Progress</th><th>Status</th><th title="Working days after baseline finish; Friday and Saturday excluded; actual finish for completed tasks, today for unfinished tasks">Baseline Delay (workdays)</th></tr>';
+  table.querySelector('thead').innerHTML='<tr><th>ID</th><th>Task Name</th><th>Project</th><th>Start</th><th>Finish</th><th>Baseline Finish</th><th>Progress</th><th>Status</th><th title="Working days after baseline finish; Friday and Saturday excluded; actual finish for completed tasks, today for unfinished tasks"><span class="baseline-delay-label">Baseline Delay (workdays)</span> <button id="baselineDelayToggle" type="button" aria-expanded="'+!table.classList.contains('baseline-delay-collapsed')+'" aria-label="'+(table.classList.contains('baseline-delay-collapsed')?'Show baseline delay':'Hide baseline delay')+'"></button></th></tr>';
   $('taskRows').innerHTML=filtered.map((t,index)=>'<tr><td>'+t.id+'</td><td class="task"><button type="button" class="gantt-task-button" data-detail-task="'+index+'">'+esc(t.name)+'</button></td><td>'+esc(t.project)+'</td><td>'+fmt(t.start)+'</td><td>'+fmt(t.finish)+'</td><td>'+fmt(t.baselineFinish)+'</td><td>'+Math.round(t.percentComplete||0)+'%</td><td><span class="status-pill '+statusClass(status(t))+'">'+status(t)+'</span></td>'+baselineDelayCell(t)+'</tr>').join('')||'<tr><td colspan="9" class="empty">No matching tasks.</td></tr>';
   $('taskRows').querySelectorAll('[data-detail-task]').forEach(button => {
     button.onclick = () => showGanttTask(filtered[Number(button.dataset.detailTask)]);
