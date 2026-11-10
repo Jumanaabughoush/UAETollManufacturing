@@ -121,7 +121,7 @@ exportTasks.onclick = () => {
 
 const taskControls = document.createElement('div');
 taskControls.className = 'gantt-controls gantt-legend';
-taskControls.innerHTML = '<label>Status <select id="detailStatus"><option value="">All statuses</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
+taskControls.innerHTML = '<label>Status <select id="detailStatus"><option value="">All Status</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
   + '<label>Sort by <select id="detailSort"><option value="">Schedule order</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option></select></label>'
   + '<label><input type="checkbox" id="detailCritical"> Critical only</label>'
   + '<button type="button" id="detailReset">Reset filters</button>';
