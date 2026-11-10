@@ -42,7 +42,7 @@
     #dashboardPage .kpi:has(#kpiTasks) { order: 1; }
     #dashboardPage .kpi:has(#kpiPlanned) { order: 2; }
     #scheduleDelayCard { order: 3; }
-    @media (min-width: 781px) { #dashboardPage .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 781px) { #dashboardPage .kpis { grid-template-columns: repeat(3, minmax(0, 265px)); } }
     .detail-grid > .panel:has(> #histogram) > .panel-head > span { display: none; }
     #statusChart #clearDonut { display: none; }
     .sidebar[hidden] { display: none; }
@@ -80,7 +80,7 @@
     #taskDetails .baseline-delay-collapsed tbody td:last-child:not([colspan]) { visibility: hidden; font-size: 0; padding-inline: 0; }
     #detailTaskName { min-height: 36px; width: min(220px, 100%); padding: 5px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); color: var(--ink); font-size: .8125rem; }
     .shell #dashboardPage .kpis { gap: 12px; }
-    .shell #dashboardPage .kpi { min-height: 96px; padding: 13px 17px; border-radius: 13px; }
+    .shell #dashboardPage .kpi { min-height: 74px; padding: 9px 13px; border-radius: 11px; }
     .shell #dashboardPage .kpi-value { margin-top: 5px; font-size: clamp(1.45rem, 2.2vw, 1.85rem); }
     #dashboardPage .project-finish-card { order: 4; }
     .shell #dashboardPage .project-finish-card .kpi-value { font-size: clamp(1rem, 1.65vw, 1.45rem); }
