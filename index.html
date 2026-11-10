@@ -154,12 +154,12 @@
   const df=new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric'}), fmt=v=>v?df.format(new Date(v)):'—';
   const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   let projects=[],selected='all';
-  const finishDateFormatter = new Intl.DateTimeFormat('en-GB', {weekday:'short', day:'2-digit', month:'short', year:'2-digit', timeZone:'UTC'});
+  const finishDateFormatter = new Intl.DateTimeFormat('en-GB', {day:'2-digit', month:'short', year:'2-digit', timeZone:'UTC'});
   function formatFinishDate(value) {
     const date = new Date(value?.slice(0, 10));
     if (!Number.isFinite(date.getTime())) return '—';
     const parts = Object.fromEntries(finishDateFormatter.formatToParts(date).map(part => [part.type, part.value]));
-    return parts.weekday + ' ' + parts.day + ' ' + parts.month + " '" + parts.year;
+    return parts.day + ' ' + parts.month + " '" + parts.year;
   }
   const rootTask=p=>p.tasks.find(t=>t.id===0)||p.tasks[0];
   const workTasks=p=>{
