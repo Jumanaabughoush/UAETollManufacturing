@@ -121,7 +121,7 @@ exportTasks.onclick = () => {
 
 const taskControls = document.createElement('div');
 taskControls.className = 'gantt-controls gantt-legend';
-taskControls.innerHTML = '<label>Task name <input id="detailTaskName" type="search" placeholder="e.g. AMT or Eng batch"></label>'
+taskControls.innerHTML = '<label>Task name <select id="detailTaskName"><option value="">All tasks</option></select></label>'
   + '<label>Status <select id="detailStatus"><option value="">All Status</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
   + '<label>Sort by <select id="detailSort"><option value="" disabled selected>Select sort</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option></select></label>'
   + '<label><input type="checkbox" id="detailCritical"> Critical only</label>'
@@ -129,7 +129,6 @@ taskControls.innerHTML = '<label>Task name <input id="detailTaskName" type="sear
 taskTable.closest('.table-scroll').before(taskControls);
 const refreshTaskDetails = () => renderTasks(currentProjects().flatMap(p => workTasks(p).map(t => ({...t, project:p.name}))));
 taskControls.addEventListener('change', refreshTaskDetails);
-$('detailTaskName').addEventListener('input', refreshTaskDetails);
 $('detailReset').onclick = () => {
   $('detailStatus').value = '';
   $('detailSort').value = '';
@@ -140,13 +139,20 @@ $('detailReset').onclick = () => {
 };
 
 renderTasks=function(tasks){
-  const query = $('detailTaskName').value.toLowerCase().match(/[a-z0-9]+/g) || [];
+  const taskNameFilter = $('detailTaskName');
+  const previousName = taskNameFilter.value;
+  const names = [...new Set(currentProjects().flatMap(project => workTasks(project).map(task => task.name)).filter(Boolean))];
+  names.sort((a, b) => a.localeCompare(b, 'en', { numeric: true, sensitivity: 'base' }));
+  taskNameFilter.innerHTML = '<option value="">All tasks</option>' +
+    names.map(name => '<option value="' + esc(name) + '">' + esc(name) + '</option>').join('');
+  const taskName = names.includes(previousName) ? previousName : '';
+  taskNameFilter.value = taskName;
   const filterStatus = $('detailStatus').value;
   const criticalOnly = $('detailCritical').checked;
   const filtered = tasks.filter(t =>
     (!filterStatus || status(t) === filterStatus) &&
     (!criticalOnly || t.critical) &&
-    query.every(word => (t.name || '').toLowerCase().includes(word))
+    (!taskName || t.name === taskName)
   );
   const sort = $('detailSort').value;
   if (sort === 'finish') filtered.sort((a,b) => (Date.parse(a.finish) || Infinity) - (Date.parse(b.finish) || Infinity));
