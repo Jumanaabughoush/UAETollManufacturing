@@ -122,7 +122,7 @@ exportTasks.onclick = () => {
 const taskControls = document.createElement('div');
 taskControls.className = 'gantt-controls gantt-legend';
 taskControls.innerHTML = '<label>Status <select id="detailStatus"><option value="">All Status</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
-  + '<label>Sort by <select id="detailSort"><option value="">Schedule order</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option></select></label>'
+  + '<label>Sort by <select id="detailSort"><option value="">Schedule order</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option><option value="name-asc">Task name (A–Z)</option><option value="name-desc">Task name (Z–A)</option></select></label>'
   + '<label><input type="checkbox" id="detailCritical"> Critical only</label>'
   + '<button type="button" id="detailReset">Reset filters</button>';
 taskTable.closest('.table-scroll').before(taskControls);
@@ -147,6 +147,10 @@ renderTasks=function(tasks){
   const sort = $('detailSort').value;
   if (sort === 'finish') filtered.sort((a,b) => (Date.parse(a.finish) || Infinity) - (Date.parse(b.finish) || Infinity));
   if (sort === 'progress') filtered.sort((a,b) => (a.percentComplete || 0) - (b.percentComplete || 0));
+  if (sort === 'name-asc' || sort === 'name-desc') {
+    const direction = sort === 'name-asc' ? 1 : -1;
+    filtered.sort((a,b) => direction * (a.name || '').localeCompare(b.name || '', 'en', {numeric:true, sensitivity:'base'}));
+  }
   exportTasks.disabled = filtered.length === 0;
   $('taskCount').textContent=filtered.length+' of '+tasks.length+' tasks';
   const table=$('taskRows').closest('table');
