@@ -122,14 +122,15 @@ exportTasks.onclick = () => {
 const taskControls = document.createElement('div');
 taskControls.className = 'gantt-controls gantt-legend';
 taskControls.innerHTML = '<label>Status <select id="detailStatus"><option value="">All Status</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
-  + '<label>Sort by <select id="detailSort"><option value="">Schedule order</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option><option value="name-asc">Task name (A–Z)</option><option value="name-desc">Task name (Z–A)</option></select></label>'
+  + '<label>Sort by <select id="detailSort"><option value="name-asc">Task name (A–Z)</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option><option value="name-desc">Task name (Z–A)</option></select></label>'
   + '<label><input type="checkbox" id="detailCritical"> Critical only</label>'
   + '<button type="button" id="detailReset">Reset filters</button>';
 taskTable.closest('.table-scroll').before(taskControls);
 const refreshTaskDetails = () => renderTasks(currentProjects().flatMap(p => workTasks(p).map(t => ({...t, project:p.name}))));
 taskControls.addEventListener('change', refreshTaskDetails);
 $('detailReset').onclick = () => {
-  $('detailStatus').value = $('detailSort').value = '';
+  $('detailStatus').value = '';
+  $('detailSort').value = 'name-asc';
   $('detailCritical').checked = false;
   if ($('clearDonut')) $('clearDonut').click();
   else refreshTaskDetails();
