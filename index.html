@@ -83,6 +83,12 @@
     .shell #dashboardPage .kpi { min-height: 74px; padding: 9px 13px; border-radius: 11px; }
     .shell #dashboardPage .kpi-value { margin-top: 5px; font-size: clamp(1.45rem, 2.2vw, 1.85rem); }
     #dashboardPage .project-finish-card { order: 4; }
+    @media (min-width: 1040px) {
+      #dashboardPage .kpis:has(> .project-finish-card:not([hidden])) {
+        grid-template-columns: repeat(4, minmax(0, 265px));
+      }
+      #dashboardPage .kpis:has(> .project-finish-card:not([hidden])) #scheduleDelayCard { order: 0; }
+    }
     .shell #dashboardPage .project-finish-card .kpi-value { font-size: clamp(1rem, 1.65vw, 1.45rem); }
   </style>
 </head>
