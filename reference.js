@@ -121,37 +121,36 @@ exportTasks.onclick = () => {
 
 const taskControls = document.createElement('div');
 taskControls.className = 'gantt-controls gantt-legend';
-taskControls.innerHTML = '<label>Status <select id="detailStatus"><option value="">All Status</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
-  + '<label>Sort by <select id="detailSort"><option value="name-asc">Task name (A–Z)</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option><option value="name-desc">Task name (Z–A)</option></select></label>'
+taskControls.innerHTML = '<label>Task name <input id="detailTaskName" type="search" placeholder="e.g. AMT or Eng batch"></label>'
+  + '<label>Status <select id="detailStatus"><option value="">All Status</option><option>In Progress</option><option>Overdue</option><option>Upcoming</option><option>Completed</option></select></label>'
+  + '<label>Sort by <select id="detailSort"><option value="" disabled selected>Select sort</option><option value="finish">Earliest finish</option><option value="progress">Lowest progress</option></select></label>'
   + '<label><input type="checkbox" id="detailCritical"> Critical only</label>'
   + '<button type="button" id="detailReset">Reset filters</button>';
 taskTable.closest('.table-scroll').before(taskControls);
 const refreshTaskDetails = () => renderTasks(currentProjects().flatMap(p => workTasks(p).map(t => ({...t, project:p.name}))));
 taskControls.addEventListener('change', refreshTaskDetails);
+$('detailTaskName').addEventListener('input', refreshTaskDetails);
 $('detailReset').onclick = () => {
   $('detailStatus').value = '';
-  $('detailSort').value = 'name-asc';
+  $('detailSort').value = '';
+  $('detailTaskName').value = '';
   $('detailCritical').checked = false;
   if ($('clearDonut')) $('clearDonut').click();
   else refreshTaskDetails();
 };
 
 renderTasks=function(tasks){
-  const q=$('taskSearch').value.trim().toLowerCase();
+  const query = $('detailTaskName').value.toLowerCase().match(/[a-z0-9]+/g) || [];
   const filterStatus = $('detailStatus').value;
   const criticalOnly = $('detailCritical').checked;
   const filtered = tasks.filter(t =>
     (!filterStatus || status(t) === filterStatus) &&
     (!criticalOnly || t.critical) &&
-    (!q || (t.name || '').toLowerCase().includes(q) || (t.project || '').toLowerCase().includes(q))
+    query.every(word => (t.name || '').toLowerCase().includes(word))
   );
   const sort = $('detailSort').value;
   if (sort === 'finish') filtered.sort((a,b) => (Date.parse(a.finish) || Infinity) - (Date.parse(b.finish) || Infinity));
   if (sort === 'progress') filtered.sort((a,b) => (a.percentComplete || 0) - (b.percentComplete || 0));
-  if (sort === 'name-asc' || sort === 'name-desc') {
-    const direction = sort === 'name-asc' ? 1 : -1;
-    filtered.sort((a,b) => direction * (a.name || '').localeCompare(b.name || '', 'en', {numeric:true, sensitivity:'base'}));
-  }
   exportTasks.disabled = filtered.length === 0;
   $('taskCount').textContent=filtered.length+' of '+tasks.length+' tasks';
   const table=$('taskRows').closest('table');
